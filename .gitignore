@@ -1,0 +1,14 @@
+# build outputs (the database is rebuilt by the ETL)
+build/
+etl/target/
+# IDE / OS
+.claude/
+.idea/
+*.iml
+.vscode/
+.DS_Store
+.Rhistory
+.RData
+.Rproj.user/
+# Power BI working files
+*.pbix.tmp

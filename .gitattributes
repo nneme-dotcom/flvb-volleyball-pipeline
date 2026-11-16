@@ -1,0 +1,5 @@
+# CSV files are stored byte-for-byte: raw data stays exactly as published, and
+# the exported dataset (LF line endings) must not differ between Windows and CI.
+*.csv -text
+*.png binary
+*.sh  text eol=lf

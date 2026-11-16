@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Unit and integration tests
+        working-directory: etl
+        run: mvn -B test
+
+      - name: Run the pipeline on the sample data
+        working-directory: etl
+        run: mvn -B -q compile exec:java
+
+      - name: Exported dataset is up to date
+        # The Power BI CSVs are committed; fail if the code would produce different ones.
+        run: git diff --exit-code -- powerbi/data
+
+      - name: Example queries run
+        run: |
+          sudo apt-get update -q && sudo apt-get install -y -q sqlite3
+          sqlite3 build/volleyball.db < sql/03_analysis_queries.sql
